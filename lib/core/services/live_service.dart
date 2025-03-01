@@ -3,7 +3,7 @@ import '../models/live_site.dart';
 
 class LiveService {
   final Dio _dio = Dio(BaseOptions(
-    baseUrl: 'http://10.0.2.2:5000',
+    baseUrl: '1',
     connectTimeout: const Duration(seconds: 10),
     receiveTimeout: const Duration(seconds: 10),
   ));

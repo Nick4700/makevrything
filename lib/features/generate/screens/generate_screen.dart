@@ -11,12 +11,10 @@ import 'package:flutter/services.dart'; // Clipboard için
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
-
-// Görünüm modları
-enum ViewMode { web, chat, code } // Web ve chat ayrı modlar olarak eklendi
+import '../../../core/enums/view_mode.dart';  // ViewMode enum'ını import et
 
 class GenerateScreen extends StatefulWidget {
-  const GenerateScreen({super.key});
+  const GenerateScreen({Key? key}) : super(key: key);
 
   @override
   State<GenerateScreen> createState() => _GenerateScreenState();
@@ -128,7 +126,8 @@ class _GenerateScreenState extends State<GenerateScreen> {
     switch (_currentMode) {
       case ViewMode.web:
         return HtmlPreviewWidget(
-          htmlContent: chatProvider.formattedHtml,
+          htmlContent: chatProvider.currentHtml,
+          viewMode: _currentMode,
         );
 
       case ViewMode.chat:
@@ -187,7 +186,10 @@ class _GenerateScreenState extends State<GenerateScreen> {
         );
 
       case ViewMode.code:
-        return _buildCodeView(chatProvider);
+        return HtmlPreviewWidget(
+          htmlContent: chatProvider.currentHtml,
+          viewMode: _currentMode,
+        );
     }
   }
 

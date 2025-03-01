@@ -3,13 +3,16 @@ import 'package:provider/provider.dart';
 import '../../../core/models/html_file.dart';
 import '../../../providers/library_provider.dart';
 import '../../home/widgets/html_preview_widget.dart';
+import '../../../core/enums/view_mode.dart';
 
 class EditFileScreen extends StatefulWidget {
   final HtmlFile? file;
+  final ViewMode viewMode;
 
   const EditFileScreen({
     super.key,
     this.file,
+    this.viewMode = ViewMode.web,
   });
 
   @override
@@ -110,6 +113,7 @@ class _EditFileScreenState extends State<EditFileScreen> {
             child: _isPreviewMode
                 ? HtmlPreviewWidget(
                     htmlContent: _contentController.text,
+                    viewMode: widget.viewMode,
                   )
                 : Padding(
                     padding: const EdgeInsets.all(16),

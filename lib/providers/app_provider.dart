@@ -3,14 +3,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../core/models/app.dart';
 import 'dart:convert';
 import '../core/utils/error_handler.dart';
+import '../core/services/api_service.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 
 class AppProvider extends ChangeNotifier {
   final SharedPreferences _prefs;
+  final ApiService _apiService;
+  final BuildContext? context;
   List<App> _apps = [];
   static const String _key = 'apps';
   bool _isLoading = false;
 
-  AppProvider(this._prefs) {
+  AppProvider(this._prefs, this._apiService, [this.context]) {
     _loadApps();
   }
 
@@ -100,6 +105,53 @@ class AppProvider extends ChangeNotifier {
       if (index != -1) {
         _apps[index] = _apps[index].copyWith(name: newName);
         await _saveApps();
+      }
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> publishApp(String appId, String appName, String html, bool isPublic) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      final response = await _apiService.post('${_apiService.appsEndpoint}/publish', {
+        'appId': appId,
+        'name': appName,
+        'html': html,
+        'isPublic': isPublic,
+      });
+
+      if (response.statusCode != 200) {
+        throw Exception('Uygulama yayınlanamadı: ${response.body}');
+      }
+
+      final responseData = jsonDecode(response.body);
+      final publishedId = responseData['id'];
+      final publishedUrl = '/apps/$publishedId/$appName';
+      
+      if (context != null) {
+        ScaffoldMessenger.of(context!).showSnackBar(
+          SnackBar(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Uygulama başarıyla yayınlandı'),
+                Text('URL: $publishedUrl', style: const TextStyle(fontSize: 12)),
+              ],
+            ),
+            action: SnackBarAction(
+              label: 'Kopyala',
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: publishedUrl));
+              },
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     } finally {
       _isLoading = false;

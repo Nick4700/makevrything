@@ -3,13 +3,17 @@ import '../features/generate/screens/generate_screen.dart';
 import '../features/account/screens/account_screen.dart';
 import '../features/templates/screens/templates_screen.dart';
 import '../features/apps/screens/apps_screen.dart';
-import '../features/app/screens/app_view_screen.dart';
 import '../features/apps/screens/app_viewer_screen.dart';
+import '../features/auth/screens/login_screen.dart';
 
 class AppRouter {
   static final router = GoRouter(
-    initialLocation: '/generate',
+    initialLocation: '/',
     routes: [
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const LoginScreen(),
+      ),
       GoRoute(
         path: '/generate',
         builder: (context, state) => const GenerateScreen(),

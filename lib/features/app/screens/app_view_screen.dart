@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import '../../../providers/app_provider.dart';
 import '../../home/widgets/html_preview_widget.dart';
 import 'package:provider/provider.dart';
+import '../../../core/enums/view_mode.dart';
 
 class AppViewScreen extends StatelessWidget {
   final String appId;
+  final ViewMode viewMode;
 
   const AppViewScreen({
     super.key,
     required this.appId,
+    this.viewMode = ViewMode.web,
   });
 
   @override
@@ -24,6 +27,7 @@ class AppViewScreen extends StatelessWidget {
           ),
           body: HtmlPreviewWidget(
             htmlContent: app.htmlContent,
+            viewMode: viewMode,
           ),
         );
       },

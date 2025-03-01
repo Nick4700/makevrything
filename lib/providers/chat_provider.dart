@@ -64,24 +64,12 @@ class ChatProvider extends ChangeNotifier {
 
   void loadHtmlFile(String content) {
     _currentHtml = content;
-    _messages.clear(); // Önceki mesajları temizle
+    _messages.clear();
     notifyListeners();
   }
 
   void updateHtml(String newHtml) {
     _currentHtml = newHtml;
-    notifyListeners();
-  }
-
-  void insertHtmlElement(String element) {
-    if (!_currentHtml.contains('</body>')) {
-      _currentHtml = '$_currentHtml\n$element';
-    } else {
-      _currentHtml = _currentHtml.replaceFirst(
-        '</body>',
-        '$element\n</body>',
-      );
-    }
     notifyListeners();
   }
 
@@ -91,7 +79,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   String get formattedHtml {
-    if (!_currentHtml.contains('<!DOCTYPE html>')) {
+    if (!_currentHtml.contains('<body>')) {
       return '''
 <!DOCTYPE html>
 <html lang="tr">

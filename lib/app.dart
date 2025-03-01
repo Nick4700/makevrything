@@ -7,13 +7,16 @@ import 'providers/template_provider.dart';
 import 'providers/app_provider.dart';
 import 'providers/chat_provider.dart';
 import 'providers/theme_provider.dart';
+import 'core/services/api_service.dart';
 
 class EverythingApp extends StatelessWidget {
   final SharedPreferences prefs;
+  final ApiService apiService;
 
   const EverythingApp({
     super.key,
     required this.prefs,
+    required this.apiService,
   });
 
   @override
@@ -24,7 +27,7 @@ class EverythingApp extends StatelessWidget {
           create: (_) => ThemeProvider(prefs),
         ),
         ChangeNotifierProvider(
-          create: (_) => AppProvider(prefs),
+          create: (context) => AppProvider(prefs, apiService),
         ),
         ChangeNotifierProvider(
           create: (_) => ChatProvider(),

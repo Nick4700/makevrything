@@ -76,7 +76,7 @@ class LibraryScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EditFileScreen(
+              builder: (context) => const EditFileScreen(
                 file: null, // Yeni dosya oluştur
               ),
             ),

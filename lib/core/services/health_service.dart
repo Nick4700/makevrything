@@ -2,6 +2,7 @@ import 'ai_service.dart';
 
 class HealthService {
   final AIService _aiService;
+  static const baseUrl = 'http://makeverything.pythonanywhere.com/';
 
   HealthService(this._aiService);
 

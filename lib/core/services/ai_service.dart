@@ -18,7 +18,6 @@ class AIService {
       if (response.data['error'] != null) {
         throw Exception(response.data['error']);
       }
-
       return response.data['html'] as String;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout) {

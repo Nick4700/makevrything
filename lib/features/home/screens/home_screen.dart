@@ -8,11 +8,15 @@ import '../../../core/services/health_service.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/services/ai_service.dart';
 import '../widgets/code_editor_widget.dart';
-import '../widgets/style_editor_widget.dart';
-import '../widgets/media_manager_widget.dart';
+import '../../../core/enums/view_mode.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final ViewMode viewMode;
+
+  const HomeScreen({
+    Key? key,
+    this.viewMode = ViewMode.web,
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -57,25 +61,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  void _showStyleEditor(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => SizedBox(
-        height: MediaQuery.of(context).size.height * 0.8,
-        child: const StyleEditorWidget(),
-      ),
-    );
-  }
-
-  void _showMediaManager(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => const MediaManagerWidget(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     if (!_isConnected) {
@@ -137,16 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.code),
               onPressed: () => _showEditor(context),
               tooltip: 'HTML Düzenle',
-            ),
-            IconButton(
-              icon: const Icon(Icons.palette),
-              onPressed: () => _showStyleEditor(context),
-              tooltip: 'Stil Düzenle',
-            ),
-            IconButton(
-              icon: const Icon(Icons.perm_media),
-              onPressed: () => _showMediaManager(context),
-              tooltip: 'Medya Ekle',
             ),
           ],
         ),
@@ -230,6 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   : HtmlPreviewWidget(
                       htmlContent: chatProvider.currentHtml,
+                      viewMode: widget.viewMode,
                     ),
             ),
           ],
